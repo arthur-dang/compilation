@@ -138,13 +138,65 @@ void prev_character(lexer_state* lex){
 
 /* Called with lex just after "//"; return with lex just after a line break */
 void skip_single_line_comment(lexer_state* lex){
+    char character = get_character(lex);
+    while (!is_character_new_line(character)){
+        next_character(lex);
+        character = get_character(lex);
+    }
+    next_character(lex);
 }
 
 /* Called with lex just after "/ *"; return with lex just after a "* /" */
 void skip_multi_line_comment(lexer_state* lex){
+    int out = 0;
+    while (out == 0){
+        char character = get_character(lex);
+        if (character == '*') {
+            next_character(lex);
+            character = get_character(lex);
+            if(character == '/'){
+                out = 1;
+            } else {
+                prev_character(lex);
+            }
+        }
+        next_character(lex);
+    }
 }
 
 void find_next_character(lexer_state* lex) {
+    // TODO: selon le lexer_state avancer la position dans le fichier jusqu'au prochain caractère significatif
+    // 1) Avancer d'une position
+    // 2) Regarder si c'est un caractère significatif
+    // 3) Itérer jusqu'à ce que ce soit un caractère significatif
+
+    char character = get_character(lex);
+    while ( is_character_new_line(character) || is_character_whitespace(character)) {
+        next_character(lex);
+        character = get_character(lex);
+    }
+    if (character == '/') {
+        next_character(lex);
+        character = get_character(lex);
+        if (character == '/') {
+            next_character(lex);
+            skip_single_line_comment(lex);
+        }
+        else if (character == '*') {
+            next_character(lex);
+            skip_multi_line_comment(lex);
+        }
+        else {
+            prev_character(lex);
+        }
+    }
+
+    // Si termine le commentaire par une fin à la ligne faut refaire
+    character = get_character(lex);
+    while ( is_character_new_line(character) || is_character_whitespace(character)) {
+        next_character(lex);
+        character = get_character(lex);
+    }
 }
 
 void next_symbol(lexer_state* lex) {
@@ -153,7 +205,8 @@ void next_symbol(lexer_state* lex) {
   char character = get_character(lex);
   if (character == CHAR_EOF) {
     lex->symbol.tag = SYM_EOF;
-  } else if (isdigit(character)) {
+  }
+  else if (isdigit(character)) { // Check si c'est un chiffre
     // accommodate integer and null for termination
     if(lex->symbol.id) free(lex->symbol.id);
     lex->symbol.id = malloc(MAX_INTEGER_LENGTH + 1);
@@ -163,7 +216,7 @@ void next_symbol(lexer_state* lex) {
         lexer_error_message(lex, "integer out of bound");
         exit(EXITCODE_SCANNERERROR);
       }
-      lex->symbol.id[i] =  character;
+      lex->symbol.id[i] = character;
       i++;
       next_character(lex);
       character = get_character(lex);
@@ -171,10 +224,114 @@ void next_symbol(lexer_state* lex) {
     lex->symbol.id[i] =  0; // null-terminated string
     lex->symbol.tag = SYM_INTEGER;
   }
+  else if (isalpha(character)) {
+      char* temp = "";
+      if(lex->symbol.id) free(lex->symbol.id);
+      lex->symbol.id = malloc(MAX_IDENTIFIER_LENGTH + 1);
+      i = 0;
+      while (isalnum(character)) {
+          temp += character;
+          if (i >= MAX_IDENTIFIER_LENGTH) {
+              lexer_error_message(lex, "identifier out of bound");
+              exit(EXITCODE_SCANNERERROR);
+          }
+          lex->symbol.id[i] = character;
+          i++;
+          next_character(lex);
+          character = get_character(lex);
+      }
+      if (strcmp(temp,"if") == 0) {
+          lex->symbol.tag = SYM_IF;
+          lex->symbol.id = NULL;
+      } else if (strcmp(temp,"else") == 0) {
+          lex->symbol.tag = SYM_ELSE;
+          lex->symbol.id = NULL;
+      } else if (strcmp(temp,"return") == 0) {
+          lex->symbol.tag = SYM_RETURN;
+          lex->symbol.id = NULL;
+      } else if (strcmp(temp,"while") == 0) {
+          lex->symbol.tag = SYM_WHILE;
+          lex->symbol.id = NULL;
+      } else if (strcmp(temp,"print") == 0) {
+          lex->symbol.tag = SYM_PRINT;
+          lex->symbol.id = NULL;
+      } else {
+          lex->symbol.id[i] = 0; // null-terminated string
+          lex->symbol.tag = SYM_IDENTIFIER;
+      }
+  }
   else if (character == ';') {
+    lex->symbol.tag = SYM_SEMICOLON;
+    next_character(lex);
+  } else if (character  == '('){
+    lex->symbol.tag = SYM_LPARENTHESIS;
+    next_character(lex);
+  } else if (character  == ')'){
+    lex->symbol.tag = SYM_RPARENTHESIS;
+    next_character(lex);
+  } else if (character  == '{'){
+    lex->symbol.tag = SYM_LBRACE;
+    next_character(lex);
+  } else if (character  == '}'){
+    lex->symbol.tag = SYM_RBRACE;
+    next_character(lex);
+  } else if (character  == '+'){
+    lex->symbol.tag = SYM_PLUS;
+    next_character(lex);
+  } else if (character  == '-'){
+    lex->symbol.tag = SYM_MINUS;
+    next_character(lex);
+  } else if (character  == ','){
+    lex->symbol.tag = SYM_COMMA;
+    next_character(lex);
+  } else if (character  == '%'){
+    lex->symbol.tag = SYM_MOD;
+    next_character(lex);
+  } else if (character  == '*'){
+    lex->symbol.tag = SYM_ASTERISK;
+    next_character(lex);
+  } else if (character  == '/'){
+    lex->symbol.tag = SYM_DIV;
+    next_character(lex);
+  }
+  else if (character == '<') {
     next_character(lex);
     character = get_character(lex);
-    lex->symbol.tag = SYM_SEMICOLON;
+    if (character == '=') {
+        lex->symbol.tag = SYM_LEQ;
+        next_character(lex);
+    } else {
+        lex->symbol.tag = SYM_LT;
+    }
+  } else if (character == '>') {
+      next_character(lex);
+      character = get_character(lex);
+      if (character == '=') {
+          lex->symbol.tag = SYM_GEQ;
+          next_character(lex);
+      } else {
+          lex->symbol.tag = SYM_GT;
+      }
+  } else if (character == '=') {
+      next_character(lex);
+      character = get_character(lex);
+      if (character == '=') {
+          lex->symbol.tag = SYM_EQUALITY;
+          next_character(lex);
+      } else {
+          lex->symbol.tag = SYM_ASSIGN;
+      }
+  } else if (character == '!') {
+      next_character(lex);
+      character = get_character(lex);
+      if (character == '=') {
+          lex->symbol.tag = SYM_NOTEQ;
+          next_character(lex);
+      } else {
+          print_line_number( "lexer error", lex->line_number);
+          printf("found unknown character %c\n", character);
+          exit(EXITCODE_SCANNERERROR);
+      }
   }
   else {
     print_line_number( "lexer error", lex->line_number);
