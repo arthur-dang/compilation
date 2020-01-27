@@ -196,26 +196,27 @@ struct instruction* make_instr(struct ast_node* ast){
 }
 
 struct eprog* make_eprog(struct ast_node* ast){
-  if(!ast){
-    fprintf(stderr, "make_eprog: the AST is NULL! Aborting...\n");
-    exit(1);
-  }
-  struct eprog* p = (struct eprog*)malloc(sizeof(struct eprog));
-  assert(ast->tag == AST_NODE_FUNDEF);
-  assert(list_length(ast->children) == 3);
-  p->fname = string_of_string_leaf(list_nth(ast->children,0));
-  p->args = NULL;
-  struct ast_node* nargs = list_nth(ast->children,1);
-  assert(nargs->tag == AST_NODE_FUNARGS);
-  list* largs = nargs->children;
-  while(largs){
-    p->args = list_append(p->args, string_of_string_leaf(largs->elt));
-    largs = largs->next;
-  }
-  struct ast_node* body = list_nth(ast->children,2);
-  assert(body->tag == AST_NODE_FUNBODY);
-  p->body = make_instr(list_nth(body->children,0));
-  return p;
+  /* if(!ast){ */
+  /*   fprintf(stderr, "make_eprog: the AST is NULL! Aborting...\n"); */
+  /*   exit(1); */
+  /* } */
+  /* struct eprog* p = (struct eprog*)malloc(sizeof(struct eprog)); */
+  /* assert(ast->tag == AST_NODE_FUNDEF); */
+  /* assert(list_length(ast->children) == 3); */
+  /* p->fname = string_of_string_leaf(list_nth(ast->children,0)); */
+  /* p->args = NULL; */
+  /* struct ast_node* nargs = list_nth(ast->children,1); */
+  /* assert(nargs->tag == AST_NODE_FUNARGS); */
+  /* list* largs = nargs->children; */
+  /* while(largs){ */
+  /*   p->args = list_append(p->args, string_of_string_leaf(largs->elt)); */
+  /*   largs = largs->next; */
+  /* } */
+  /* struct ast_node* body = list_nth(ast->children,2); */
+  /* assert(body->tag == AST_NODE_FUNBODY); */
+  /* p->body = make_instr(list_nth(body->children,0)); */
+  /* return p; */
+  return NULL;
 }
 
 void free_expression(struct expression* e){
