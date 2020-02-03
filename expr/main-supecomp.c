@@ -209,6 +209,13 @@ int main(int argc, char** argv) {
   int lin_run = 0;
   list* lin_params = NULL;
   unsigned int curarg = 1;
+  int
+    do_ast = 0,
+    do_e = 0,
+    do_cfg = 0,
+    do_rtl = 0,
+    do_lin = 0,
+    do_asm = 0;
   myname = argv[0];
   if (argc - curarg == 0){
     print_usage();
@@ -220,30 +227,37 @@ int main(int argc, char** argv) {
 
       if (!strcmp(option,  "-ast")){
         ast_file = argv[curarg++];
+        do_ast = 1;
       }
       else if (!strcmp(option,  "-elang")){
         elang_file = argv[curarg++];
+        do_e = 1;
       }
       else if (!strcmp(option,  "-cfg")){
         cfg_file = argv[curarg++];
+        do_cfg = 1;
       }
       else if (!strcmp(option,  "-rtl")){
         rtl_file = argv[curarg++];
+        do_rtl = 1;
       }
       else if (!strcmp(option,  "-lin")){
         lin_file = argv[curarg++];
+        do_lin = 1;
       }
       else if (!strcmp(option,  "-libdir")){
         libdir = argv[curarg++];
       }
       else if (!strcmp(option, "-s")){
         s_file = argv[curarg++];
+        do_asm = 1;
       }
       else if (!strcmp(option,  "-o")){
         if(!libdir){
           printf("No libdir specified, don't know where to find main.c!\n");
           exit(1);
         }
+        do_asm = 1;
         exe_file = argv[curarg++];
       }
       else if (!strcmp(option, "-naive-regalloc")){
@@ -259,18 +273,22 @@ int main(int argc, char** argv) {
       else if (!strcmp(option,  "-elang-run")){
         elang_run = 1;
         elang_params = list_params(argc, argv, &curarg);
+        do_e = 1;
       }
       else if (!strcmp(option,  "-cfg-run")){
         cfg_run = 1;
         cfg_params = list_params(argc, argv, &curarg);
+        do_cfg = 1;
       }
       else if (!strcmp(option,  "-rtl-run")){
         rtl_run = 1;
         rtl_params = list_params(argc, argv, &curarg);
+        do_rtl = 1;
       }
       else if (!strcmp(option,  "-lin-run")){
         lin_run = 1;
         lin_params = list_params(argc, argv, &curarg);
+        do_lin = 1;
       }
 
       else if(!strcmp(option, "-target")){
@@ -308,24 +326,36 @@ int main(int argc, char** argv) {
       }
     }
 
+    if(do_asm) do_lin = 1;
+    if(do_lin) do_rtl = 1;
+    if(do_rtl) do_cfg = 1;
+    if(do_cfg) do_e = 1;
+    if(do_e) do_ast = 1;
+
+
     if (source_name){
       FILE* source_fd = fopen(source_name, "r");
       if (!source_fd) {
         printf("%s: could not open input file %s\n", myname, source_name);
         exit(EXITCODE_IOERROR);
       }
-      ast = parse_file(source_fd);
+      if(do_ast) {
+        ast = parse_file(source_fd);
+      } else {
+        show_lexemes(source_fd);
+      }
       if(fclose(source_fd) < 0){
         printf("%s: could not close file descriptor %p\n", myname, source_fd);
         exit(EXITCODE_IOERROR);
       }
-      ep = make_eprog(ast);
-      cfg = cfg_of_e_prog(ep);
-      cfg = dead_assign_elimination_prog(cfg);
-      cfg = constant_propagation_cfg_prog(cfg);
-      /* cfg = dead_assign_elimination_prog(cfg); */
-      rtl = rtl_of_cfg_prog(cfg);
-      lin = linearize_prog(rtl);
+      if(do_e) ep = make_eprog(ast);
+      if(do_cfg){
+        cfg = cfg_of_e_prog(ep);
+        cfg = dead_assign_elimination_prog(cfg);
+        cfg = constant_propagation_cfg_prog(cfg);
+      }
+      if(do_rtl) rtl = rtl_of_cfg_prog(cfg);
+      if(do_lin) lin = linearize_prog(rtl);
     }
 
     if(ast_file != NULL){
@@ -362,7 +392,7 @@ int main(int argc, char** argv) {
         produce_x86asm(fileno(f), lin, m64);
       close_file(f);
     }
-    if(exe_file != NULL){
+    if(do_asm && exe_file != NULL && lin != NULL){
       if(target_riscv)
         compile_riscv(lin, libdir, exe_file);
       else

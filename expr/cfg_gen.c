@@ -42,15 +42,17 @@ void print_graph(cfg* c){
 }
 
 void free_cfg(cfg_prog* cfg){
-  free(cfg->fname);
-  list* largs = cfg->args;
-  while(largs){
-    free(largs->elt);
-    largs = largs->next;
+  if(cfg){
+    free(cfg->fname);
+    list* largs = cfg->args;
+    while(largs){
+      free(largs->elt);
+      largs = largs->next;
+    }
+    free_list(cfg->args);
+    free_graph(cfg->graph);
+    free(cfg);
   }
-  free_list(cfg->args);
-  free_graph(cfg->graph);
-  free(cfg);
 }
 
 

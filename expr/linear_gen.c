@@ -61,9 +61,11 @@ linear_prog* linearize_prog(rtl_prog* rtl){
 }
 
 void free_lin(linear_prog* lin){
-  free(lin->fname);
-  free_list(lin->args);
-  free_rtl_ops(lin->ops);
-  free_list(lin->ops);
-  free(lin);
+  if(lin){
+    free(lin->fname);
+    free_list(lin->args);
+    free_rtl_ops(lin->ops);
+    free_list(lin->ops);
+    free(lin);
+  }
 }

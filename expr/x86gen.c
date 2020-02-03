@@ -215,6 +215,10 @@ void x86_of_rtl_ops(allocation* alloc, FILE* f, list* ns){
 }
 
 void x86_of_lin_prog(FILE* f, linear_prog* lin, int m64){
+  if(!lin){
+    fprintf(stderr, "x86gen: lin prog is NULL.\n");
+    exit(-1);
+  }
   target_m64 = m64;
   if(m64){
     regs = regs64;

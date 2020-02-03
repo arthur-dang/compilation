@@ -79,28 +79,28 @@ void init_ast_tags(){
   register_tag_name(AST_FACTORS, "AST_FACTORS");
   register_tag_name(AST_TERMS, "AST_TERMS");
 
-  register_tag_name(AST_STRING, "STRING");
+  register_tag_name(AST_STRING, "AST_STRING");
 
-  register_tag_name(AST_INT, "EINT");
-  register_tag_name(AST_EADD, "EADD");
-  register_tag_name(AST_ESUB, "ESUB");
-  register_tag_name(AST_EMUL, "EMUL");
-  register_tag_name(AST_EDIV, "EDIV");
-  register_tag_name(AST_EMOD, "EMOD");
-  register_tag_name(AST_ENEG, "ENEG");
-  register_tag_name(AST_CLT, "CLT");
-  register_tag_name(AST_CLE, "CLE");
-  register_tag_name(AST_CGT, "CGT");
-  register_tag_name(AST_CGE, "CGE");
-  register_tag_name(AST_CEQ, "CEQ");
-  register_tag_name(AST_CNEQ, "CNE");
+  register_tag_name(AST_INT, "AST_INT");
+  register_tag_name(AST_EADD, "AST_EADD");
+  register_tag_name(AST_ESUB, "AST_ESUB");
+  register_tag_name(AST_EMUL, "AST_EMUL");
+  register_tag_name(AST_EDIV, "AST_EDIV");
+  register_tag_name(AST_EMOD, "AST_EMOD");
+  register_tag_name(AST_ENEG, "AST_ENEG");
+  register_tag_name(AST_CLT, "AST_CLT");
+  register_tag_name(AST_CLE, "AST_CLE");
+  register_tag_name(AST_CGT, "AST_CGT");
+  register_tag_name(AST_CGE, "AST_CGE");
+  register_tag_name(AST_CEQ, "AST_CEQ");
+  register_tag_name(AST_CNEQ, "AST_CNE");
 
-  register_tag_name(AST_IASSIGN, "IASSIGN");
-  register_tag_name(AST_IIFTHENELSE, "IIFTHENELSE");
-  register_tag_name(AST_IWHILE, "IWHILE");
-  register_tag_name(AST_IRETURN, "IRETURN");
-  register_tag_name(AST_IPRINT, "IPRINT");
-  register_tag_name(AST_IBLOCK, "IBLOCK");
+  register_tag_name(AST_IASSIGN, "AST_IASSIGN");
+  register_tag_name(AST_IIFTHENELSE, "AST_IIFTHENELSE");
+  register_tag_name(AST_IWHILE, "AST_IWHILE");
+  register_tag_name(AST_IRETURN, "AST_IRETURN");
+  register_tag_name(AST_IPRINT, "AST_IPRINT");
+  register_tag_name(AST_IBLOCK, "AST_IBLOCK");
 }
 
 void free_ast_tags(){

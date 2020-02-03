@@ -30,6 +30,23 @@ char* eat(lexer_state* lex, enum symbol_t token){
   }
 }
 
+void show_lexemes(FILE* fd) {
+  struct lexer_state* lex = init_lexer_state(fd);
+  next_symbol(lex); // gets the first symbol
+  // Now the parser can be run
+  while(lex->symbol.tag != SYM_EOF){
+    char* sym_string = string_of_symbol(lex->symbol);
+    printf("Found symbol '%s'\n", sym_string);
+    free(sym_string);
+    next_symbol(lex);
+  }
+  // Free lexer state...
+  if(lex->symbol.id)
+    free(lex->symbol.id);
+  free(lex);
+}
+
+
 struct ast_node* parse_file(FILE* fd) {
   struct lexer_state* lex = init_lexer_state(fd);
   eaten_symbols = NULL;

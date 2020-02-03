@@ -133,6 +133,10 @@ void riscv_of_rtl_ops(allocation* alloc, FILE* f, list* ns){
 }
 
 void riscv_of_lin_prog(FILE* f, linear_prog* lin){
+  if(!lin){
+    fprintf(stderr, "riscvgen: lin prog is NULL.\n");
+    exit(-1);
+  }
   int num;
   allocation* alloc = regalloc_prog(lin, &num);
   riscv_fix_allocation(alloc);

@@ -156,8 +156,10 @@ void free_rtl_graph(rtl* r){
 }
 
 void free_rtl(rtl_prog* rtl){
-  free(rtl->fname);
-  free_list(rtl->args);
-  free_rtl_graph(rtl->graph);
-  free(rtl);
+  if(rtl){
+    free(rtl->fname);
+    free_list(rtl->args);
+    free_rtl_graph(rtl->graph);
+    free(rtl);
+  }
 }

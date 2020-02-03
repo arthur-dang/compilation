@@ -52,9 +52,6 @@ int* run_rtl_ops(int_int_state_t** s, rtl* r, list* ns){
     int* res = run_rtl_op(s, r, ns->elt);
     if(res) return res;
     return run_rtl_ops(s, r, ns->next);
-    /* int* res = run_rtl_ops(s, r, ns->next); */
-    /* if(res) return res; */
-    /* return run_rtl_op(s, r, ns->elt); */
   }
   return NULL;
 }
