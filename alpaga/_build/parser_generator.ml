@@ -56,7 +56,7 @@ let not_bangs pl =
 
 let rec make_c_list l =
   match l with
-    [] -> "list_new()"
+    [] -> "NULL"
   | i::r -> Printf.sprintf "cons($%d,%s)" (i+1) (make_c_list r)
 
 (* If no element has a hat, return this list of elements without a bang. If one

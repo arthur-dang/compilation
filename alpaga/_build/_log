@@ -2,57 +2,57 @@
 # Target: parser_generator.ml.depends, tags: { package(str), extension:ml, file:parser_generator.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
 ocamlfind ocamldep -package str -modules parser_generator.ml > parser_generator.ml.depends
 # Target: grammar_parser.ml.depends, tags: { package(str), extension:ml, file:grammar_parser.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules grammar_parser.ml > grammar_parser.ml.depends
+ocamlfind ocamldep -package str -modules grammar_parser.ml > grammar_parser.ml.depends # cached
 # Target: grammar_lexer.mll, tags: { package(str), extension:mll, file:grammar_lexer.mll, lexer, ocaml, ocamllex, quiet, traverse, use_menhir }
-ocamllex.opt -q grammar_lexer.mll
+ocamllex.opt -q grammar_lexer.mll # cached
 # Target: grammar_lexer.ml.depends, tags: { package(str), extension:ml, file:grammar_lexer.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules grammar_lexer.ml > grammar_lexer.ml.depends
+ocamlfind ocamldep -package str -modules grammar_lexer.ml > grammar_lexer.ml.depends # cached
 # Target: grammar_parser_yacc.mly.depends, tags: { package(str), extension:mly, file:grammar_parser_yacc.mly, infer, menhir_ocamldep, ocaml, ocamldep, quiet, traverse, use_menhir }
-menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' grammar_parser_yacc.mly > grammar_parser_yacc.mly.depends
+menhir --raw-depend --ocamldep 'ocamlfind ocamldep -modules' grammar_parser_yacc.mly > grammar_parser_yacc.mly.depends # cached
 # Target: qualifiers.ml.depends, tags: { package(str), extension:ml, file:qualifiers.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules qualifiers.ml > qualifiers.ml.depends
+ocamlfind ocamldep -package str -modules qualifiers.ml > qualifiers.ml.depends # cached
 # Target: qualifiers.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:qualifiers.cmo, file:qualifiers.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o qualifiers.cmo qualifiers.ml
+ocamlfind ocamlc -c -g -package str -o qualifiers.cmo qualifiers.ml # cached
 # Target: grammar_parser_yacc.mly, tags: { package(str), byte, compile, extension:ml, extension:mly, file:grammar_parser_yacc.ml, file:grammar_parser_yacc.mly, infer, menhir, ocaml, parser, quiet, traverse, use_menhir }
-menhir --ocamlc 'ocamlfind ocamlc -g -package str' --infer grammar_parser_yacc.mly
+menhir --ocamlc 'ocamlfind ocamlc -g -package str' --infer grammar_parser_yacc.mly # cached
 # Target: grammar_parser_yacc.mli.depends, tags: { package(str), extension:mli, file:grammar_parser_yacc.mli, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules grammar_parser_yacc.mli > grammar_parser_yacc.mli.depends
+ocamlfind ocamldep -package str -modules grammar_parser_yacc.mli > grammar_parser_yacc.mli.depends # cached
 # Target: grammar_parser_yacc.cmi, tags: { package(str), byte, compile, extension:mli, file:grammar_parser_yacc.mli, interf, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o grammar_parser_yacc.cmi grammar_parser_yacc.mli
-# Target: list_utils.ml.depends, tags: { package(str), extension:ml, file:list_utils.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules list_utils.ml > list_utils.ml.depends
-# Target: printing.ml.depends, tags: { package(str), extension:ml, file:printing.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules printing.ml > printing.ml.depends
+ocamlfind ocamlc -c -g -package str -o grammar_parser_yacc.cmi grammar_parser_yacc.mli # cached
 # Target: grammar_lexer.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:grammar_lexer.cmo, file:grammar_lexer.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o grammar_lexer.cmo grammar_lexer.ml
+ocamlfind ocamlc -c -g -package str -o grammar_lexer.cmo grammar_lexer.ml # cached
+# Target: list_utils.ml.depends, tags: { package(str), extension:ml, file:list_utils.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
+ocamlfind ocamldep -package str -modules list_utils.ml > list_utils.ml.depends # cached
 # Target: list_utils.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:list_utils.cmo, file:list_utils.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o list_utils.cmo list_utils.ml
+ocamlfind ocamlc -c -g -package str -o list_utils.cmo list_utils.ml # cached
+# Target: printing.ml.depends, tags: { package(str), extension:ml, file:printing.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
+ocamlfind ocamldep -package str -modules printing.ml > printing.ml.depends # cached
 # Target: printing.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:printing.cmo, file:printing.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o printing.cmo printing.ml
-# Target: ll_parser.ml.depends, tags: { package(str), extension:ml, file:ll_parser.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules ll_parser.ml > ll_parser.ml.depends
+ocamlfind ocamlc -c -g -package str -o printing.cmo printing.ml # cached
 # Target: grammar_parser.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:grammar_parser.cmo, file:grammar_parser.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o grammar_parser.cmo grammar_parser.ml
+ocamlfind ocamlc -c -g -package str -o grammar_parser.cmo grammar_parser.ml # cached
+# Target: ll_parser.ml.depends, tags: { package(str), extension:ml, file:ll_parser.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
+ocamlfind ocamldep -package str -modules ll_parser.ml > ll_parser.ml.depends # cached
 # Target: ll_parser.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:ll_parser.cmo, file:ll_parser.ml, implem, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlc -c -g -package str -o ll_parser.cmo ll_parser.ml
+ocamlfind ocamlc -c -g -package str -o ll_parser.cmo ll_parser.ml # cached
 # Target: parser_generator.cmo, tags: { package(str), byte, compile, extension:cmo, extension:ml, file:parser_generator.cmo, file:parser_generator.ml, implem, ocaml, quiet, traverse, use_menhir }
 ocamlfind ocamlc -c -g -package str -o parser_generator.cmo parser_generator.ml
 # Target: grammar_parser_yacc.ml.depends, tags: { package(str), extension:ml, file:grammar_parser_yacc.ml, ocaml, ocamldep, quiet, traverse, use_menhir }
-ocamlfind ocamldep -package str -modules grammar_parser_yacc.ml > grammar_parser_yacc.ml.depends
+ocamlfind ocamldep -package str -modules grammar_parser_yacc.ml > grammar_parser_yacc.ml.depends # cached
 # Target: qualifiers.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:qualifiers.cmx, file:qualifiers.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o qualifiers.cmx qualifiers.ml
+ocamlfind ocamlopt -c -g -package str -o qualifiers.cmx qualifiers.ml # cached
 # Target: grammar_parser_yacc.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:grammar_parser_yacc.cmx, file:grammar_parser_yacc.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o grammar_parser_yacc.cmx grammar_parser_yacc.ml
+ocamlfind ocamlopt -c -g -package str -o grammar_parser_yacc.cmx grammar_parser_yacc.ml # cached
 # Target: grammar_lexer.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:grammar_lexer.cmx, file:grammar_lexer.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o grammar_lexer.cmx grammar_lexer.ml
+ocamlfind ocamlopt -c -g -package str -o grammar_lexer.cmx grammar_lexer.ml # cached
 # Target: list_utils.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:list_utils.cmx, file:list_utils.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o list_utils.cmx list_utils.ml
+ocamlfind ocamlopt -c -g -package str -o list_utils.cmx list_utils.ml # cached
 # Target: printing.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:printing.cmx, file:printing.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o printing.cmx printing.ml
+ocamlfind ocamlopt -c -g -package str -o printing.cmx printing.ml # cached
 # Target: grammar_parser.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:grammar_parser.cmx, file:grammar_parser.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o grammar_parser.cmx grammar_parser.ml
+ocamlfind ocamlopt -c -g -package str -o grammar_parser.cmx grammar_parser.ml # cached
 # Target: ll_parser.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:ll_parser.cmx, file:ll_parser.ml, implem, native, ocaml, quiet, traverse, use_menhir }
-ocamlfind ocamlopt -c -g -package str -o ll_parser.cmx ll_parser.ml
+ocamlfind ocamlopt -c -g -package str -o ll_parser.cmx ll_parser.ml # cached
 # Target: parser_generator.cmx, tags: { package(str), compile, extension:cmx, extension:ml, file:parser_generator.cmx, file:parser_generator.ml, implem, native, ocaml, quiet, traverse, use_menhir }
 ocamlfind ocamlopt -c -g -package str -o parser_generator.cmx parser_generator.ml
 # Target: parser_generator.native, tags: { package(str), dont_link_with, extension:native, file:parser_generator.native, link, native, ocaml, program, quiet, traverse, use_menhir }
