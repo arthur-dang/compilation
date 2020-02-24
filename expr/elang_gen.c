@@ -97,7 +97,6 @@ enum unop_t unop_of_ast(enum ast_tag t){
 struct expression* make_expr(struct ast_node* ast);
 
 struct expression* make_terms(struct list* l){
-  printf("IN make terms");
   struct expression* res = NULL;
   struct list* node_list = l;
   struct ast_node* node = node_list->elt;
@@ -231,20 +230,19 @@ struct list* make_iblock (struct list* children){
 }
 
 struct instruction* make_instr(struct ast_node* ast){
-  printf("IN make instr");
   switch(ast->tag){
   case AST_IBLOCK:
     {
-//      struct instruction* i = new_instr();
-//      i->type = IBLOCK;
-//      i->iblock.l->elt = make_instr(ast->children->elt);
-//      if(ast->children->next != NULL){
-//        i->iblock.l->next = make_iblock(ast->children);
-//      } else {
-//        i->iblock.l->next = NULL;
-//      }
-//      return i;
-    return NULL;
+      struct instruction* i = new_instr();
+      i->type = IBLOCK;
+      struct list* l = (struct list*)malloc(sizeof(struct list));
+      l->elt = make_instr(ast->children->elt);
+      l->next = NULL;
+      if(ast->children->next != NULL){
+        l->next = make_iblock(ast->children->next);
+      }
+      i->iblock.l = l;
+      return i;
     }
   case AST_IASSIGN:
     return make_instr_assign(string_of_string_leaf(list_nth(ast->children,0)),
