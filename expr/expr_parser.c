@@ -671,12 +671,12 @@ struct ast_node* parse_FACTIR(lexer_state* lex){
   if(lex->symbol.tag ==  SYM_IDENTIFIER){
     char* p1 = eat(lex, SYM_IDENTIFIER);
 
-     return make_node(AST_ESUB, cons(make_string_leaf(strdup(p1)), NULL)); 
+     return make_node(AST_ENEG, cons(make_string_leaf(strdup(p1)), NULL)); 
 }
   if(lex->symbol.tag ==  SYM_INTEGER){
     char* p1 = eat(lex, SYM_INTEGER);
 
-     return make_node(AST_ESUB, cons(make_int_leaf(atoi(p1)), NULL)); 
+     return make_node(AST_ENEG, cons(make_int_leaf(atoi(p1)), NULL)); 
 }
   syntax_error_message(lex, "error while parsing FACTIR");
   printf("Expected one of ");

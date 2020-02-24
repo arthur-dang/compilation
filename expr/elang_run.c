@@ -121,5 +121,5 @@ int run_eprog(struct eprog* p, struct list* args){
   } else {
     exit(-1);
   }
-  return 0;
+  return -1;
 }

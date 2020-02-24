@@ -111,11 +111,13 @@ struct expression* make_terms(struct list* l){
       case AST_FACTORS:
       case AST_INT:
       case AST_STRING:
+      case AST_ENEG:
         res = make_expr(node);
         break;
       case AST_EADD:
       case AST_ESUB:
       case AST_EMUL:
+      case AST_EMOD:
       case AST_EDIV:
       case AST_CGT:
       case AST_CLT:
@@ -197,7 +199,7 @@ struct instruction* make_instr_print(struct expression* e){
 
 struct instruction* make_instr_ifthenelse(struct expression* cmp,
                                          struct instruction* ithen,
-                                         struct instruction *ielse){
+                                         struct instruction* ielse){
   struct instruction* i = new_instr();
   i->type = IIFTHENELSE;
   i->iif.cmp = cmp;
@@ -235,6 +237,10 @@ struct instruction* make_instr(struct ast_node* ast){
     {
       struct instruction* i = new_instr();
       i->type = IBLOCK;
+      if(ast->children == NULL){
+        i->iblock.l = NULL;
+        return i;
+      }
       struct list* l = (struct list*)malloc(sizeof(struct list));
       l->elt = make_instr(ast->children->elt);
       l->next = NULL;

@@ -103,8 +103,8 @@ border:none;
  <tr id='rule-42' style='border: none;'><td class='left'>(42)</td> <td class='left'>  </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_LPARENTHESIS <a href='#nt-EXPR' style='color: black;'>EXPR</a> SYM_RPARENTHESIS</td><td class='left'><pre> return $2; </pre></td></tr>
  <tr id='rule-43' style='border: none;'><td class='left'>(43)</td> <td class='left'>  </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_MINUS <a href='#nt-FACTIR' style='color: black;'>FACTIR</a></td><td class='left'><pre> return $2; </pre></td></tr>
 
- <tr id='rule-44' style='border-top: solid 1px;'><td class='left'>(44)</td> <td class='left'> <span id='nt-FACTIR'>FACTIR</span> </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_IDENTIFIER</td><td class='left'><pre> return make_node(AST_ESUB, cons(make_string_leaf(strdup($1)), NULL)); </pre></td></tr>
- <tr id='rule-45' style='border: none;'><td class='left'>(45)</td> <td class='left'>  </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_INTEGER</td><td class='left'><pre> return make_node(AST_ESUB, cons(make_int_leaf(atoi($1)), NULL)); </pre></td></tr>
+ <tr id='rule-44' style='border-top: solid 1px;'><td class='left'>(44)</td> <td class='left'> <span id='nt-FACTIR'>FACTIR</span> </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_IDENTIFIER</td><td class='left'><pre> return make_node(AST_ENEG, cons(make_string_leaf(strdup($1)), NULL)); </pre></td></tr>
+ <tr id='rule-45' style='border: none;'><td class='left'>(45)</td> <td class='left'>  </td class='left'> <td class='left'> -> </td> <td class='left'>  SYM_INTEGER</td><td class='left'><pre> return make_node(AST_ENEG, cons(make_int_leaf(atoi($1)), NULL)); </pre></td></tr>
 
 </table>
 <h1>Table Null</h1>

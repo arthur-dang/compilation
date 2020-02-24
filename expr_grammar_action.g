@@ -53,5 +53,5 @@ FACTOR -> SYM_IDENTIFIER { return make_string_leaf(strdup($1)); }
 FACTOR -> SYM_INTEGER { return make_int_leaf(atoi($1)); }
 FACTOR -> SYM_LPARENTHESIS EXPR SYM_RPARENTHESIS { return $2; }
 FACTOR -> SYM_MINUS FACTIR { return $2; }
-FACTIR -> SYM_IDENTIFIER { return make_node(AST_ESUB, cons(make_string_leaf(strdup($1)), NULL)); }
-FACTIR -> SYM_INTEGER { return make_node(AST_ESUB, cons(make_int_leaf(atoi($1)), NULL)); }
+FACTIR -> SYM_IDENTIFIER { return make_node(AST_ENEG, cons(make_string_leaf(strdup($1)), NULL)); }
+FACTIR -> SYM_INTEGER { return make_node(AST_ENEG, cons(make_int_leaf(atoi($1)), NULL)); }
