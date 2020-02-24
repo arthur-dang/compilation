@@ -30,7 +30,7 @@ WHILE -> SYM_WHILE SYM_LPARENTHESIS EXPR SYM_RPARENTHESIS SYM_LBRACE IBLOCK SYM_
 
 IFELSE -> SYM_IF SYM_LPARENTHESIS EXPR SYM_RPARENTHESIS SYM_LBRACE IBLOCK SYM_RBRACE ELSE { return make_node(AST_IIFTHENELSE, cons($3, cons(make_node(AST_IBLOCK, $6), cons($8, NULL)))); }
 ELSE -> SYM_ELSE SYM_LBRACE IBLOCK SYM_RBRACE { return make_node(AST_IBLOCK, $3); }
-ELSE -> { return NULL; }
+ELSE -> { return make_node(AST_IBLOCK, NULL); }
 
 EXPR -> CMP CMPP { return make_node(AST_CMPS, cons($1,$2)); }
 CMPP -> SYM_EQUALITY CMP CMPP { return cons(make_node(AST_CEQ, NULL), cons($2, $3)); }

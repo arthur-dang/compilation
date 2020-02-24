@@ -76,7 +76,7 @@ int* run_instruction(string_int_state_t** s, struct instruction* i){
     case IRETURN:
       return some((void*)(unsigned long)run_expression(*s, i->ireturn.e));
     case IPRINT:
-      printf("%d", run_expression(*s, i->iprint.e));
+      printf("%d\n", run_expression(*s, i->iprint.e));
       return NULL;
     case IBLOCK:
       {
@@ -108,7 +108,7 @@ int run_eprog(struct eprog* p, struct list* args){
       printf("Not enough given arguments\n");
       exit(1);
     }
-    s = string_int_set_val(s, varNames->elt, (int) varValues->elt);
+    s = string_int_set_val(s, varNames->elt, (int)(unsigned long) varValues->elt);
     varNames = varNames->next;
     varValues = varValues->next;
   }
