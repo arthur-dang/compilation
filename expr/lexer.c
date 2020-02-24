@@ -225,12 +225,12 @@ void next_symbol(lexer_state* lex) {
     lex->symbol.tag = SYM_INTEGER;
   }
   else if (isalpha(character)) {
-      char* temp = "";
+      char temp[MAX_IDENTIFIER_LENGTH]= "";
       if(lex->symbol.id) free(lex->symbol.id);
       lex->symbol.id = malloc(MAX_IDENTIFIER_LENGTH + 1);
       i = 0;
-      while (isalnum(character)) {
-          temp += character;
+      while (isalnum(character) || character == '_' || character == '-') {
+          strncat(temp, &character, 1);
           if (i >= MAX_IDENTIFIER_LENGTH) {
               lexer_error_message(lex, "identifier out of bound");
               exit(EXITCODE_SCANNERERROR);

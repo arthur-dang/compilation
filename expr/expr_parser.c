@@ -118,71 +118,6 @@ struct list* parse_IBLOCK(lexer_state* lex){
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
   exit(1);
 }
-struct list* parse_IF(lexer_state* lex){
-  if(lex->symbol.tag ==  SYM_IF){
-    eat(lex, SYM_IF);
-    eat(lex, SYM_LPARENTHESIS);
-    struct ast_node* p3 = parse_EXPR(lex);
-    eat(lex, SYM_RPARENTHESIS);
-    eat(lex, SYM_LBRACE);
-    struct list* p6 = parse_IBLOCK(lex);
-    eat(lex, SYM_RBRACE);
-
-     return cons(p3, p6); 
-}
-  syntax_error_message(lex, "error while parsing IF");
-  printf("Expected one of ");
-  printf("{ %s", string_of_token(SYM_IF));
-  printf("}");
-  printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
-  exit(1);
-}
-struct list* parse_ELSE(lexer_state* lex){
-  if(lex->symbol.tag ==  SYM_IDENTIFIER){
-
-     return NULL; 
-}
-  if(lex->symbol.tag ==  SYM_IF){
-
-     return NULL; 
-}
-  if(lex->symbol.tag ==  SYM_ELSE){
-    eat(lex, SYM_ELSE);
-    eat(lex, SYM_LBRACE);
-    struct list* p3 = parse_IBLOCK(lex);
-    eat(lex, SYM_RBRACE);
-
-     return p3; 
-}
-  if(lex->symbol.tag ==  SYM_RBRACE){
-
-     return NULL; 
-}
-  if(lex->symbol.tag ==  SYM_WHILE){
-
-     return NULL; 
-}
-  if(lex->symbol.tag ==  SYM_RETURN){
-
-     return NULL; 
-}
-  if(lex->symbol.tag ==  SYM_PRINT){
-
-     return NULL; 
-}
-  syntax_error_message(lex, "error while parsing ELSE");
-  printf("Expected one of ");
-  printf("{ %s", string_of_token(SYM_IDENTIFIER));
-  printf(", %s", string_of_token(SYM_IF));
-  printf(", %s", string_of_token(SYM_ELSE));
-  printf(", %s", string_of_token(SYM_RBRACE));
-  printf(", %s", string_of_token(SYM_WHILE));
-  printf(", %s", string_of_token(SYM_RETURN));
-  printf(", %s", string_of_token(SYM_PRINT));
-  printf("}");
-  printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
-  exit(1);
-}
 struct list* parse_CMPP(lexer_state* lex){
   if(lex->symbol.tag ==  SYM_SEMICOLON){
 
@@ -510,14 +445,66 @@ struct ast_node* parse_PRINT(lexer_state* lex){
 }
 struct ast_node* parse_IFELSE(lexer_state* lex){
   if(lex->symbol.tag ==  SYM_IF){
-    struct list* p1 = parse_IF(lex);
-    struct list* p2 = parse_ELSE(lex);
+    eat(lex, SYM_IF);
+    eat(lex, SYM_LPARENTHESIS);
+    struct ast_node* p3 = parse_EXPR(lex);
+    eat(lex, SYM_RPARENTHESIS);
+    eat(lex, SYM_LBRACE);
+    struct list* p6 = parse_IBLOCK(lex);
+    eat(lex, SYM_RBRACE);
+    struct ast_node* p8 = parse_ELSE(lex);
 
-     return make_node(AST_IIFTHENELSE, cons(p1, p2)); 
+     return make_node(AST_IIFTHENELSE, cons(p3, cons(make_node(AST_IBLOCK, p6), cons(p8, NULL)))); 
 }
   syntax_error_message(lex, "error while parsing IFELSE");
   printf("Expected one of ");
   printf("{ %s", string_of_token(SYM_IF));
+  printf("}");
+  printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
+  exit(1);
+}
+struct ast_node* parse_ELSE(lexer_state* lex){
+  if(lex->symbol.tag ==  SYM_IDENTIFIER){
+
+     return NULL; 
+}
+  if(lex->symbol.tag ==  SYM_IF){
+
+     return NULL; 
+}
+  if(lex->symbol.tag ==  SYM_ELSE){
+    eat(lex, SYM_ELSE);
+    eat(lex, SYM_LBRACE);
+    struct list* p3 = parse_IBLOCK(lex);
+    eat(lex, SYM_RBRACE);
+
+     return make_node(AST_IBLOCK, p3); 
+}
+  if(lex->symbol.tag ==  SYM_RBRACE){
+
+     return NULL; 
+}
+  if(lex->symbol.tag ==  SYM_WHILE){
+
+     return NULL; 
+}
+  if(lex->symbol.tag ==  SYM_RETURN){
+
+     return NULL; 
+}
+  if(lex->symbol.tag ==  SYM_PRINT){
+
+     return NULL; 
+}
+  syntax_error_message(lex, "error while parsing ELSE");
+  printf("Expected one of ");
+  printf("{ %s", string_of_token(SYM_IDENTIFIER));
+  printf(", %s", string_of_token(SYM_IF));
+  printf(", %s", string_of_token(SYM_ELSE));
+  printf(", %s", string_of_token(SYM_RBRACE));
+  printf(", %s", string_of_token(SYM_WHILE));
+  printf(", %s", string_of_token(SYM_RETURN));
+  printf(", %s", string_of_token(SYM_PRINT));
   printf("}");
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
   exit(1);
@@ -532,7 +519,7 @@ struct ast_node* parse_WHILE(lexer_state* lex){
     struct list* p6 = parse_IBLOCK(lex);
     eat(lex, SYM_RBRACE);
 
-     return make_node(AST_IWHILE, cons(p3, p6)); 
+     return make_node(AST_IWHILE, cons(p3, cons(make_node(AST_IBLOCK, p6), NULL))); 
 }
   syntax_error_message(lex, "error while parsing WHILE");
   printf("Expected one of ");
@@ -554,6 +541,12 @@ struct ast_node* parse_EXPR(lexer_state* lex){
 
      return make_node(AST_CMPS, cons(p1,p2)); 
 }
+  if(lex->symbol.tag ==  SYM_MINUS){
+    struct ast_node* p1 = parse_CMP(lex);
+    struct list* p2 = parse_CMPP(lex);
+
+     return make_node(AST_CMPS, cons(p1,p2)); 
+}
   if(lex->symbol.tag ==  SYM_LPARENTHESIS){
     struct ast_node* p1 = parse_CMP(lex);
     struct list* p2 = parse_CMPP(lex);
@@ -564,6 +557,7 @@ struct ast_node* parse_EXPR(lexer_state* lex){
   printf("Expected one of ");
   printf("{ %s", string_of_token(SYM_IDENTIFIER));
   printf(", %s", string_of_token(SYM_INTEGER));
+  printf(", %s", string_of_token(SYM_MINUS));
   printf(", %s", string_of_token(SYM_LPARENTHESIS));
   printf("}");
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
@@ -582,6 +576,12 @@ struct ast_node* parse_CMP(lexer_state* lex){
 
      return make_node(AST_TERMS, cons(p1,p2)); 
 }
+  if(lex->symbol.tag ==  SYM_MINUS){
+    struct ast_node* p1 = parse_TERM(lex);
+    struct list* p2 = parse_TERMP(lex);
+
+     return make_node(AST_TERMS, cons(p1,p2)); 
+}
   if(lex->symbol.tag ==  SYM_LPARENTHESIS){
     struct ast_node* p1 = parse_TERM(lex);
     struct list* p2 = parse_TERMP(lex);
@@ -592,6 +592,7 @@ struct ast_node* parse_CMP(lexer_state* lex){
   printf("Expected one of ");
   printf("{ %s", string_of_token(SYM_IDENTIFIER));
   printf(", %s", string_of_token(SYM_INTEGER));
+  printf(", %s", string_of_token(SYM_MINUS));
   printf(", %s", string_of_token(SYM_LPARENTHESIS));
   printf("}");
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
@@ -610,6 +611,12 @@ struct ast_node* parse_TERM(lexer_state* lex){
 
      return make_node(AST_FACTORS, cons(p1,p2)); 
 }
+  if(lex->symbol.tag ==  SYM_MINUS){
+    struct ast_node* p1 = parse_FACTOR(lex);
+    struct list* p2 = parse_FACTORP(lex);
+
+     return make_node(AST_FACTORS, cons(p1,p2)); 
+}
   if(lex->symbol.tag ==  SYM_LPARENTHESIS){
     struct ast_node* p1 = parse_FACTOR(lex);
     struct list* p2 = parse_FACTORP(lex);
@@ -620,6 +627,7 @@ struct ast_node* parse_TERM(lexer_state* lex){
   printf("Expected one of ");
   printf("{ %s", string_of_token(SYM_IDENTIFIER));
   printf(", %s", string_of_token(SYM_INTEGER));
+  printf(", %s", string_of_token(SYM_MINUS));
   printf(", %s", string_of_token(SYM_LPARENTHESIS));
   printf("}");
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
@@ -636,6 +644,12 @@ struct ast_node* parse_FACTOR(lexer_state* lex){
 
      return make_int_leaf(atoi(p1)); 
 }
+  if(lex->symbol.tag ==  SYM_MINUS){
+    eat(lex, SYM_MINUS);
+    struct ast_node* p2 = parse_FACTIR(lex);
+
+     return p2; 
+}
   if(lex->symbol.tag ==  SYM_LPARENTHESIS){
     eat(lex, SYM_LPARENTHESIS);
     struct ast_node* p2 = parse_EXPR(lex);
@@ -647,7 +661,27 @@ struct ast_node* parse_FACTOR(lexer_state* lex){
   printf("Expected one of ");
   printf("{ %s", string_of_token(SYM_IDENTIFIER));
   printf(", %s", string_of_token(SYM_INTEGER));
+  printf(", %s", string_of_token(SYM_MINUS));
   printf(", %s", string_of_token(SYM_LPARENTHESIS));
+  printf("}");
+  printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
+  exit(1);
+}
+struct ast_node* parse_FACTIR(lexer_state* lex){
+  if(lex->symbol.tag ==  SYM_IDENTIFIER){
+    char* p1 = eat(lex, SYM_IDENTIFIER);
+
+     return make_node(AST_ESUB, cons(make_string_leaf(strdup(p1)), NULL)); 
+}
+  if(lex->symbol.tag ==  SYM_INTEGER){
+    char* p1 = eat(lex, SYM_INTEGER);
+
+     return make_node(AST_ESUB, cons(make_int_leaf(atoi(p1)), NULL)); 
+}
+  syntax_error_message(lex, "error while parsing FACTIR");
+  printf("Expected one of ");
+  printf("{ %s", string_of_token(SYM_IDENTIFIER));
+  printf(", %s", string_of_token(SYM_INTEGER));
   printf("}");
   printf(" but got '%s' instead.\n", string_of_symbol(lex->symbol));
   exit(1);

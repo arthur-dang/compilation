@@ -97,8 +97,57 @@ enum unop_t unop_of_ast(enum ast_tag t){
 struct expression* make_expr(struct ast_node* ast);
 
 struct expression* make_terms(struct list* l){
+  printf("IN make terms");
   struct expression* res = NULL;
-  // À compléter !
+  struct list* node_list = l;
+  struct ast_node* node = node_list->elt;
+  enum binop_t bin;
+
+  while(node_list != NULL) {
+    node = node_list->elt;
+    switch (node->tag) {
+      case AST_TERMS:
+      case AST_EQS:
+      case AST_CMPS:
+      case AST_FACTORS:
+      case AST_INT:
+      case AST_STRING:
+        res = make_expr(node);
+        break;
+      case AST_EADD:
+      case AST_ESUB:
+      case AST_EMUL:
+      case AST_EDIV:
+      case AST_CGT:
+      case AST_CLT:
+      case AST_CLE:
+      case AST_CGE:
+      case AST_CEQ:
+      case AST_CNEQ:
+        bin = binop_of_ast(node->tag);
+        node_list = node_list->next;
+        node = node_list->elt;
+        switch (node->tag){
+          case AST_TERMS:
+          case AST_EQS:
+          case AST_CMPS:
+          case AST_FACTORS:
+          case AST_INT:
+          case AST_STRING:
+            res = make_expr_binop(bin, res, make_expr(node));
+            break;
+          default:
+            printf("In make_terms1, unexpected tag: %s\n", get_tag_name(node->tag));
+            exit(1);
+        }
+        break;
+      default:
+        printf("In make_terms2, unexpected tag: %s\n", get_tag_name(node->tag));
+        exit(1);
+    }
+    node_list = node_list->next;
+  }
+
   return res;
 }
 
@@ -167,13 +216,35 @@ struct instruction* make_instr_while(struct expression* cmp,
   return i;
 }
 
-struct instruction* make_instr(struct ast_node* ast){
+struct instruction* make_instr(struct ast_node* ast);
 
+struct list* make_iblock (struct list* children){
+  if (children == NULL){
+    return NULL;
+  }
+  else {
+    struct list* l = (struct list*)malloc(sizeof(struct list));
+    l->elt = make_instr(children->elt);
+    l->next = make_iblock(children->next);
+    return l;
+  }
+}
+
+struct instruction* make_instr(struct ast_node* ast){
+  printf("IN make instr");
   switch(ast->tag){
   case AST_IBLOCK:
     {
-         // À compléter !
-         return NULL;
+//      struct instruction* i = new_instr();
+//      i->type = IBLOCK;
+//      i->iblock.l->elt = make_instr(ast->children->elt);
+//      if(ast->children->next != NULL){
+//        i->iblock.l->next = make_iblock(ast->children);
+//      } else {
+//        i->iblock.l->next = NULL;
+//      }
+//      return i;
+    return NULL;
     }
   case AST_IASSIGN:
     return make_instr_assign(string_of_string_leaf(list_nth(ast->children,0)),
