@@ -24,48 +24,26 @@ void print_list(list* list){
 }
 
 list* expr_used_vars(struct expression* e){
-  struct list* used_var = (struct list*)malloc(sizeof(struct list));
+  struct list* used_var = NULL;
   switch(e->etype){
     case EUNOP: {
       printf("unop\n");
-      struct list *used_var3 = (struct list *) malloc(sizeof(struct list));
-      used_var3 = expr_used_vars(e->unop.e);
-      if (used_var3->elt == NULL) {
-        used_var->elt = NULL;
-        used_var->next = NULL;
-      } else {
-        used_var = used_var3;
-      }
+      return expr_used_vars(e->unop.e);
+
     }
     case EBINOP:
     {
+      return concat(expr_used_vars(e->binop.e1), expr_used_vars(e->binop.e2));
       printf("binop\n");
-      struct list* used_var1 = (struct list*)malloc(sizeof(struct list));
-      struct list* used_var2 = (struct list*)malloc(sizeof(struct list));
-      used_var1 = expr_used_vars(e->binop.e1);
-      used_var2 = expr_used_vars(e->binop.e2);
-      if(used_var1->elt == NULL && used_var2->elt == NULL){
-        used_var->elt = NULL;
-        used_var->next = NULL;
-      } else if(used_var1->elt == NULL) {
-        used_var = used_var2;
-      } else if(used_var2->elt == NULL){
-        used_var = used_var1;
-      } else {
-        concat(used_var1, used_var2);
-        used_var = used_var1;
-      }
     }
     case EINT:
       printf("int\n");
-      used_var->elt = NULL;
-      used_var->next = NULL;
+      return NULL;
     case EVAR:
       printf("var\n");
-      used_var->elt = e->var.s;
-      used_var->next = NULL;
+      return cons_string(e->var.s, NULL);
   }
- return used_var;
+  return used_var;
 }
 
 
@@ -88,7 +66,7 @@ list* live_before(list* live_aft, node_t* n){
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->assign.e);
-      print_list(used_var);
+      print_string_list(stdout, used_var);
       concat(list_bef, used_var);
     }
     case NODE_PRINT:
@@ -124,7 +102,7 @@ list* liveness_graph(list* map, cfg* c){
     live_aft = live_after(c->node, map);
     struct list* live_bef = (struct list*)malloc(sizeof(struct list));
     live_bef = live_before(live_aft, c->node);
-    print_list(live_bef);
+    //print_list(live_bef);
     if(!list_string_incl(live_bef, assoc_get(map, &(c->id)))){
       new_changes = 1;
       assoc_set(map, &(c->id), live_bef);
