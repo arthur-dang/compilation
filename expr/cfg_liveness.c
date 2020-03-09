@@ -61,7 +61,7 @@ list* live_after(node_t* n, list* map){
   list* live_aft = NULL;
   struct list* successeurs = (struct list*)malloc(sizeof(struct list));
   successeurs = succs_node(n);
-  void* successeur_id = successeurs->elt;
+  void* successeur_id;
   while(successeurs){
     successeur_id = successeurs->elt;
     concat(live_aft, assoc_get(map, successeur_id));
