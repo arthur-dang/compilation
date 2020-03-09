@@ -61,10 +61,9 @@ list* live_after(node_t* n, list* map){
   list* live_aft = NULL;
   struct list* successeurs = (struct list*)malloc(sizeof(struct list));
   successeurs = succs_node(n);
-  void* successeur_id;
+  printf("%d", *(int *)successeurs->elt);
   while(successeurs){
-    successeur_id = successeurs->elt;
-    concat(live_aft, assoc_get(map, successeur_id));
+    concat(live_aft, assoc_get(map, successeurs->elt));
     successeurs = successeurs->next;
   }
   return live_aft;
@@ -124,9 +123,9 @@ list* liveness_graph(list* map, cfg* c){
 }
 
 list* liveness_prog(cfg_prog* p){
-  new_changes = 0;
+  new_changes = 1;
   list* map = NULL;
-  while(!new_changes){
+  while(new_changes){
     map = liveness_graph(map, p->graph);
   }
   return map;
