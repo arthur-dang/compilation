@@ -15,14 +15,6 @@ void print_mapping(FILE* f, list* map){
   }
 }
 
-void concatenate(struct list* a,struct list* b)
-{
-  if (a->next == NULL)
-    a->next = b;
-  else
-    concatenate(a->next,b);
-}
-
 list* expr_used_vars(struct expression* e){
   struct list* used_var = (struct list*)malloc(sizeof(struct list));
   switch(e->etype){
@@ -86,25 +78,25 @@ list* live_before(list* live_aft, node_t* n){
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->assign.e);
-      concatenate(list_bef, used_var);
+      concat(list_bef, used_var);
     }
     case NODE_PRINT:
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->print.e);
-      concatenate(list_bef, used_var);
+      concat(list_bef, used_var);
     }
     case NODE_RETURN:
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->ret.e);
-      concatenate(list_bef, used_var);
+      concat(list_bef, used_var);
     }
     case NODE_COND:
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->cond.cond);
-      concatenate(list_bef, used_var);
+      concat(list_bef, used_var);
     }
     case NODE_GOTO:
       return live_aft;
