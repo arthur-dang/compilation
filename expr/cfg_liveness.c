@@ -15,10 +15,19 @@ void print_mapping(FILE* f, list* map){
   }
 }
 
+void print_list(list* list){
+  printf("print\n");
+  while(list){
+    printf("%s\n", (char*)list->elt);
+    list = list->next;
+  }
+}
+
 list* expr_used_vars(struct expression* e){
   struct list* used_var = (struct list*)malloc(sizeof(struct list));
   switch(e->etype){
     case EUNOP: {
+      printf("unop\n");
       struct list *used_var3 = (struct list *) malloc(sizeof(struct list));
       used_var3 = expr_used_vars(e->unop.e);
       if (used_var3->elt == NULL) {
@@ -30,6 +39,7 @@ list* expr_used_vars(struct expression* e){
     }
     case EBINOP:
     {
+      printf("binop\n");
       struct list* used_var1 = (struct list*)malloc(sizeof(struct list));
       struct list* used_var2 = (struct list*)malloc(sizeof(struct list));
       used_var1 = expr_used_vars(e->binop.e1);
@@ -47,9 +57,11 @@ list* expr_used_vars(struct expression* e){
       }
     }
     case EINT:
+      printf("int\n");
       used_var->elt = NULL;
       used_var->next = NULL;
     case EVAR:
+      printf("var\n");
       used_var->elt = e->var.s;
       used_var->next = NULL;
   }
@@ -61,7 +73,6 @@ list* live_after(node_t* n, list* map){
   list* live_aft = NULL;
   struct list* successeurs = (struct list*)malloc(sizeof(struct list));
   successeurs = succs_node(n);
-  printf("%d", *(int *)successeurs->elt);
   while(successeurs){
     concat(live_aft, assoc_get(map, successeurs->elt));
     successeurs = successeurs->next;
@@ -77,6 +88,7 @@ list* live_before(list* live_aft, node_t* n){
     {
       struct list* used_var = (struct list*)malloc(sizeof(struct list));
       used_var = expr_used_vars(n->assign.e);
+      print_list(used_var);
       concat(list_bef, used_var);
     }
     case NODE_PRINT:
@@ -112,6 +124,7 @@ list* liveness_graph(list* map, cfg* c){
     live_aft = live_after(c->node, map);
     struct list* live_bef = (struct list*)malloc(sizeof(struct list));
     live_bef = live_before(live_aft, c->node);
+    print_list(live_bef);
     if(!list_string_incl(live_bef, assoc_get(map, &(c->id)))){
       new_changes = 1;
       assoc_set(map, &(c->id), live_bef);
