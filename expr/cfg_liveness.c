@@ -50,7 +50,7 @@ list* expr_used_vars(struct expression* e){
       } else if(used_var2->elt == NULL){
         used_var = used_var1;
       } else {
-        concatenate(used_var1, used_var2);
+        concat(used_var1, used_var2);
         used_var = used_var1;
       }
     }
@@ -72,11 +72,7 @@ list* live_after(node_t* n, list* map){
   void* successeur_id = successeurs->elt;
   while(successeurs){
     successeur_id = successeurs->elt;
-    if(live_aft == NULL) {
-      live_aft = assoc_get(map, successeur_id);
-    } else {
-      concatenate(live_aft, assoc_get(map, successeur_id));
-    }
+    concat(live_aft, assoc_get(map, successeur_id));
     successeurs = successeurs->next;
   }
   return live_aft;
